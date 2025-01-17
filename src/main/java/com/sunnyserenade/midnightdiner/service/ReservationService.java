@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,10 @@ public class ReservationService {
     public Reservation getReservationById(Long id) {
         Optional<Reservation> opt = reservationRepository.findById(id);
         return opt.orElseThrow(() -> new RuntimeException("Reservation not found with id = " + id));
+    }
+
+    public List<Reservation> getAll() {
+        return reservationRepository.findAll();
     }
 
     public Reservation updateReservation(Long id, Reservation updated) {

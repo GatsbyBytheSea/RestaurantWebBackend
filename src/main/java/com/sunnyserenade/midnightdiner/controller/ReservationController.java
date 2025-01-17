@@ -34,6 +34,8 @@ public class ReservationController {
         return ResponseEntity.ok(reservation);
     }
 
+    // todo: 根据手机号、邮箱获取预定
+
     /**
      * 更新预订(全部字段更新)
      * PUT /api/v1/reservations/{id}
@@ -56,4 +58,6 @@ public class ReservationController {
         reservationService.cancelReservation(id);
         return ResponseEntity.noContent().build();
     }
+
+    // todo: 根据手机号取消所有预定
 }

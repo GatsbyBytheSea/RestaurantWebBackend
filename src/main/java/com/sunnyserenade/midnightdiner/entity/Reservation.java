@@ -33,8 +33,13 @@ public class Reservation {
     // 记录创建/更新时间
     @Column(nullable = false)
     private LocalDateTime createTime;
+
     @Column(nullable = false)
     private LocalDateTime updateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private RestaurantTable table;
 
     // ======= Getters/Setters =======
 
