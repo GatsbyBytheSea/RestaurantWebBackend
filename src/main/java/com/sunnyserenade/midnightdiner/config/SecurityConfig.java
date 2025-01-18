@@ -13,38 +13,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
-    private final AdminUserService adminUserService;
-
-    public SecurityConfig(AdminUserService adminUserService) {
-        this.adminUserService = adminUserService;
-    }
-
+    // ----------------
+    // 过滤器链配置
+    // ----------------
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 关闭 CSRF
-                .csrf(csrf -> csrf.disable())
-
-                // 配置权限规则
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/reservations/**").permitAll() // 允许匿名访问
-                        .requestMatchers("/api/v1/admin/auth/login").permitAll() // 允许匿名访问
-                        .requestMatchers("/api/v1/admin/**").authenticated() // 需要身份验证
-                        .anyRequest().permitAll() // 其他未指定的接口允许访问
-                )
-
-                // 禁用默认登录表单
-                .formLogin(form -> form.disable());
+                .csrf(csrf -> csrf.disable())  // 关闭CSRF
+                .authorizeHttpRequests(auth -> {
+                    // 允许匿名访问的接口
+                    auth.requestMatchers("/api/v1/reservations/**").permitAll();
+                    auth.requestMatchers("/api/v1/admin/auth/login").permitAll();
+                    // 需要认证的接口
+                    auth.requestMatchers("/api/v1/admin/**").authenticated();
+                    // 其他接口可根据需要设定
+                    auth.anyRequest().permitAll();
+                })
+                .formLogin(form -> form.disable()); // 禁用表单登录
 
         return http.build();
     }
 
+    // ----------------
+    // AuthenticationManager
+    // ----------------
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        // 从 AuthenticationConfiguration 中获取 AuthenticationManager
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
+    // ----------------
+    // BCrypt 密码加密
+    // ----------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
