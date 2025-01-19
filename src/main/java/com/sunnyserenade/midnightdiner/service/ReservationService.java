@@ -28,6 +28,19 @@ public class ReservationService {
         return opt.orElseThrow(() -> new RuntimeException("Reservation not found with id = " + id));
     }
 
+    public List<Reservation> getReservationsByCustomerPhone(String phone) {
+        return reservationRepository.findByCustomerPhone(phone);
+    }
+
+    public List<Reservation> getReservationsByCustomerName(String customerName) {
+        return reservationRepository.findByCustomerName(customerName);
+    }
+
+    public List<Reservation> getReservationsByStatus(String status) {
+        return reservationRepository.findByStatus(status);
+    }
+
+
     public List<Reservation> getAll() {
         return reservationRepository.findAll();
     }
@@ -43,9 +56,17 @@ public class ReservationService {
         return reservationRepository.save(existing);
     }
 
+    public void confirmReservation(Long id) {
+        Reservation existing = getReservationById(id);
+
+        existing.setStatus("CONFIRMED");
+        existing.setUpdateTime(LocalDateTime.now());
+        reservationRepository.save(existing);
+    }
+
     public void cancelReservation(Long id) {
         Reservation existing = getReservationById(id);
-        // 业务逻辑: 检查是否超时、是否已确认等
+        // todo: 增加业务逻辑: 检查是否超时、是否已确认等
         existing.setStatus("CANCELLED");
         existing.setUpdateTime(LocalDateTime.now());
         reservationRepository.save(existing);

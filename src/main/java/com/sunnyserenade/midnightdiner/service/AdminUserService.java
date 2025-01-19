@@ -32,13 +32,14 @@ public class AdminUserService implements UserDetailsService {
         return new User(admin.getUsername(), admin.getPassword(), authorities);
     }
 
-    public AdminUser createAdminUser(String username, String rawPassword, String role) {
-        AdminUser user = new AdminUser();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(rawPassword));
-        user.setRole(role);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
-        return adminUserRepository.save(user);
-    }
+    // 由于安全性问题，创建管理员接口不暴露给前端，只能在后端手动创建管理员用户。
+//    public AdminUser createAdminUser(String username, String rawPassword, String role) {
+//        AdminUser user = new AdminUser();
+//        user.setUsername(username);
+//        user.setPassword(passwordEncoder.encode(rawPassword));
+//        user.setRole(role);
+//        user.setCreateTime(LocalDateTime.now());
+//        user.setUpdateTime(LocalDateTime.now());
+//        return adminUserRepository.save(user);
+//    }
 }

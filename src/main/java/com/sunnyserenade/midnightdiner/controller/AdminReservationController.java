@@ -20,6 +20,37 @@ public class AdminReservationController {
         return reservationService.getAll();
     }
 
+    // 管理员可根据ID获取预订
+    @GetMapping("/{id}")
+    public ResponseEntity<Reservation> getReservation(@PathVariable Long id) {
+        Reservation reservation = reservationService.getReservationById(id);
+        return ResponseEntity.ok(reservation);
+    }
+
+    // 管理员可根据手机号、邮箱、用户姓名获取预定
+    @GetMapping("/phone/{phone}")
+    public List<Reservation> getReservationsByCustomerPhone(@PathVariable String phone) {
+        return reservationService.getReservationsByCustomerPhone(phone);
+    }
+
+    @GetMapping("/name/{customerName}")
+    public List<Reservation> getReservationsByCustomerName(@PathVariable String customerName) {
+        return reservationService.getReservationsByCustomerName(customerName);
+    }
+
+    // 管理员可根据状态获取预定
+    @GetMapping("/status/{status}")
+    public List<Reservation> getReservationsByStatus(@PathVariable String status) {
+        return reservationService.getReservationsByStatus(status);
+    }
+
+    // 管理员创建预订
+    @PostMapping
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+        Reservation saved = reservationService.createReservation(reservation);
+        return ResponseEntity.ok(saved);
+    }
+
     // 管理员更新预订
     @PutMapping("/{id}")
     public ResponseEntity<Reservation> updateReservation(

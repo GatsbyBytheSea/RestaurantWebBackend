@@ -29,6 +29,6 @@ public class AdminAuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
         }
-        // todo: 修改业务逻辑使用JWT认证机制
+        // todo: 修改业务逻辑使用JWT认证机制。修改返回格式为标准化的JSON格式
     }
 }
