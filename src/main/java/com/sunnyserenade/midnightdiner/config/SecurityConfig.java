@@ -1,14 +1,19 @@
 package com.sunnyserenade.midnightdiner.config;
 
-import com.sunnyserenade.midnightdiner.service.AdminUserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.io.PrintWriter;
 
 @Configuration
 public class SecurityConfig {
@@ -29,8 +34,20 @@ public class SecurityConfig {
                     // 其他接口可根据需要设定
                     auth.anyRequest().permitAll();
                 })
-                .formLogin(form -> form.disable()); // 禁用表单登录
-
+                .formLogin(form -> form
+                        // 将默认登录请求路径改为 /api/v1/admin/auth/login
+                        // 当前端以表单方式 (username=xxx, password=yyy) POST 到这个地址时，Security会自动认证
+                        .loginProcessingUrl("/api/v1/admin/auth/login")
+                        .successHandler(authenticationSuccessHandler())  // 自定义成功处理器
+                        .failureHandler(authenticationFailureHandler())  // 自定义失败处理器
+                        .permitAll()
+                )
+                // 启用会话策略
+                .sessionManagement(session ->
+                        // 如果需要每次请求都能创建session：ALWAYS
+                        // 如果只在需要时才创建：IF_REQUIRED
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                );
         return http.build();
     }
 
@@ -48,5 +65,33 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // ----------------
+    // 自定义登录成功处理器
+    // ----------------
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter writer = response.getWriter();
+            writer.write("{\"message\":\"Login success\"}");
+            writer.flush();
+        };
+    }
+
+    // ----------------
+    // 自定义登录失败处理器
+    // ----------------
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return (request, response, exception) -> {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter writer = response.getWriter();
+            writer.write("{\"error\":\"Invalid credentials\"}");
+            writer.flush();
+        };
     }
 }

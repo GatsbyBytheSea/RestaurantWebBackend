@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS admin_user (
 -- 如需修改初始密码请将password参数替换为其它值。
 -- Spring Security通常使用BCrypt加密，需要将此处密码修改为自定义密码的BCrypt哈希值。
 INSERT INTO admin_user (username, password, role, create_time, update_time)
-VALUES ('admin', '{bcrypt}$2a$12$hmPTccIwjAcRBNGJjVO8NuNpcR4nOuAb7v8vKArdZW7suf9WcZql.', 'SUPER_ADMIN', NOW(), NOW());
+VALUES ('admin', '$2a$12$hmPTccIwjAcRBNGJjVO8NuNpcR4nOuAb7v8vKArdZW7suf9WcZql.', 'SUPER_ADMIN', NOW(), NOW());
 
 
 GRANT SELECT

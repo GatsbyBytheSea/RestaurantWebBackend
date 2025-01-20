@@ -15,20 +15,10 @@ public class AdminAuthController {
     @Autowired
     private AuthenticationManager authManager;
 
-    // 登录接口
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> creds) {
-        String username = creds.get("username");
-        String password = creds.get("password");
-
-        try {
-            Authentication auth = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-            return ResponseEntity.ok(Map.of("message", "Login success"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
-        }
-        // todo: 修改业务逻辑使用JWT认证机制。修改返回格式为标准化的JSON格式
+    @GetMapping("/status")
+    public Map<String, Boolean> checkStatus() {
+        // 如果能进到这里，说明已通过 Security 过滤器
+        // 也可以检查 SecurityContextHolder.getContext().getAuthentication()...
+        return Map.of("loggedIn", true);
     }
 }

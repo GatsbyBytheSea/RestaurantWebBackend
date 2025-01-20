@@ -14,10 +14,12 @@ public class RestaurantTableService {
     @Autowired
     private RestaurantTableRepository tableRepository;
 
+    // 查看所有餐桌
     public List<RestaurantTable> findAllTables() {
         return tableRepository.findAll();
     }
 
+    // 更新餐桌状态
     public RestaurantTable updateTableStatus(Long id, String status) {
         RestaurantTable table = tableRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Table not found"));
@@ -26,5 +28,22 @@ public class RestaurantTableService {
         return tableRepository.save(table);
     }
 
-    // todo: 添加方法：createTable, deleteTable
+    // 添加餐桌
+    public RestaurantTable addTable(RestaurantTable table) {
+        return tableRepository.save(table);
+    }
+
+    // 删除餐桌
+    public void deleteTable(Long id) {
+        tableRepository.deleteById(id);
+    }
+
+    // 修改餐桌信息
+    public RestaurantTable updateTable(Long id, RestaurantTable updated) {
+        RestaurantTable table = tableRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+        table.setCapacity(updated.getCapacity());
+        table.setUpdateTime(LocalDateTime.now());
+        return tableRepository.save(table);
+    }
 }
