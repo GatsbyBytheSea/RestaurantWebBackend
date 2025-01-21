@@ -30,6 +30,8 @@ public class RestaurantTableService {
 
     // 添加餐桌
     public RestaurantTable addTable(RestaurantTable table) {
+        table.setCreateTime(LocalDateTime.now());
+        table.setUpdateTime(LocalDateTime.now());
         return tableRepository.save(table);
     }
 

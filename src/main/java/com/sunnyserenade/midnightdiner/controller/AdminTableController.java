@@ -33,18 +33,21 @@ public class AdminTableController {
     }
 
     // 添加餐桌
+    @PostMapping
     public ResponseEntity<RestaurantTable> addTable(@RequestBody RestaurantTable table) {
         RestaurantTable saved = tableService.addTable(table);
         return ResponseEntity.ok(saved);
     }
 
     // 删除餐桌
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTable(@PathVariable Long id) {
         tableService.deleteTable(id);
         return ResponseEntity.noContent().build();
     }
 
     // 修改餐桌信息
+    @PutMapping("/{id}")
     public ResponseEntity<RestaurantTable> updateTable(
             @PathVariable Long id,
             @RequestBody RestaurantTable updated
