@@ -71,4 +71,10 @@ public class ReservationService {
         existing.setUpdateTime(LocalDateTime.now());
         reservationRepository.save(existing);
     }
+
+    public List<Reservation> getTodayReservations() {
+        LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
+        return reservationRepository.findByReservationTimeBetween(start, end);
+    }
 }

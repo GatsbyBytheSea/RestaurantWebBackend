@@ -67,4 +67,17 @@ public class AdminReservationController {
         reservationService.cancelReservation(id);
         return ResponseEntity.noContent().build();
     }
+
+    // 管理员确认预订
+    @PutMapping("/{id}/confirm")
+    public ResponseEntity<Void> confirmReservation(@PathVariable Long id) {
+        reservationService.confirmReservation(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // 管理员获取今日预定
+    @GetMapping("/today")
+    public List<Reservation> getTodayReservations() {
+        return reservationService.getTodayReservations();
+    }
 }
