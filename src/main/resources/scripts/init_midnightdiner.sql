@@ -59,6 +59,24 @@ GRANT SELECT, INSERT, UPDATE, DELETE
     ON midnightdiner.reservation
     TO 'midnightdineruser'@'%';
 
+-- 创建菜品表 dish
+CREATE TABLE IF NOT EXISTS dish (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    description TEXT,
+    ingredients TEXT,
+    image_url VARCHAR(255),
+    create_time DATETIME NOT NULL,
+    update_time DATETIME NOT NULL
+);
+
+-- 设置权限
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON midnightdiner.dish
+    TO 'midnightdineruser'@'%';
+
 
 -- 创建后台管理用户表 admin_user
 CREATE TABLE IF NOT EXISTS admin_user (
