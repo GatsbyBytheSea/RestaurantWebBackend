@@ -26,7 +26,6 @@ public class AdminUserService implements UserDetailsService {
             throw new UsernameNotFoundException("Admin user not found: " + username);
         }
 
-        // 构建 Spring Security 的 UserDetails
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + admin.getRole()));
         return new User(admin.getUsername(), admin.getPassword(), authorities);
     }

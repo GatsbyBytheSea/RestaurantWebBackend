@@ -18,7 +18,7 @@ public class Reservation {
     @Column(nullable = false)
     private String customerPhone;
 
-    // 预订时间（就餐时间）
+    // 预订时间
     @Column(nullable = false)
     private LocalDateTime reservationTime;
 
@@ -30,7 +30,7 @@ public class Reservation {
     @Column(nullable = false)
     private String status;
 
-    // 记录创建/更新时间
+    // 更新时间
     @Column(nullable = false)
     private LocalDateTime createTime;
 
@@ -41,7 +41,7 @@ public class Reservation {
     @JoinColumn(name = "table_id")
     private RestaurantTable table;
 
-    // ======= Getters/Setters =======
+    // Getters/Setters
 
     public Long getId() {
         return id;

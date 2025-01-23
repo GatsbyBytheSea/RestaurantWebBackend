@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-// 使用 Spring Data JPA，继承 JpaRepository 即可快速实现 CRUD 操作。
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     List<Reservation> findByCustomerPhone(String phone);

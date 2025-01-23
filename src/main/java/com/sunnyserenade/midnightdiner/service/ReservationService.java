@@ -47,7 +47,6 @@ public class ReservationService {
 
     public Reservation updateReservation(Long id, Reservation updated) {
         Reservation existing = getReservationById(id);
-        // 根据实际需求，校验是否允许更新
         existing.setReservationTime(updated.getReservationTime());
         existing.setNumberOfGuests(updated.getNumberOfGuests());
         existing.setCustomerName(updated.getCustomerName());
@@ -58,7 +57,6 @@ public class ReservationService {
 
     public void confirmReservation(Long id) {
         Reservation existing = getReservationById(id);
-
         existing.setStatus("CONFIRMED");
         existing.setUpdateTime(LocalDateTime.now());
         reservationRepository.save(existing);
@@ -66,9 +64,9 @@ public class ReservationService {
 
     public void cancelReservation(Long id) {
         Reservation existing = getReservationById(id);
-        // todo: 增加业务逻辑: 检查是否超时、是否已确认等
         existing.setStatus("CANCELLED");
         existing.setUpdateTime(LocalDateTime.now());
+        // todo：释放餐桌
         reservationRepository.save(existing);
     }
 

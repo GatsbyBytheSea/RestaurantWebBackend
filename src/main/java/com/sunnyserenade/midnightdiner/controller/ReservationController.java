@@ -35,7 +35,7 @@ public class ReservationController {
     }
 
     /**
-     * 更新预订(全部字段更新)
+     * 更新预订
      * PUT /api/v1/reservations/{id}
      */
     @PutMapping("/{id}")

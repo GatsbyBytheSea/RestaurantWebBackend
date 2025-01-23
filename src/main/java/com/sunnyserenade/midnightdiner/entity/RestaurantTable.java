@@ -12,11 +12,12 @@ public class RestaurantTable {
 
     private String tableName;     // 桌名/编号
     private Integer capacity;     // 可容纳人数
-    private String status;        // AVAILABLE / IN_USE / ...
+    private String status;        // AVAILABLE / IN_USE / RESERVED
+    private String Location;      // Location of the table
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-    // ======= Getters/Setters =======
+    // Getters/Setters
 
     public void setId(Long id) {
         this.id = id;
@@ -35,6 +36,9 @@ public class RestaurantTable {
     }
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+    public void setLocation(String location) {
+        Location = location;
     }
 
 
@@ -55,5 +59,8 @@ public class RestaurantTable {
     }
     public String getTableName(){
         return tableName;
+    }
+    public String getLocation() {
+        return Location;
     }
 }

@@ -13,10 +13,10 @@ public class AdminAuthController {
     @Autowired
     private AuthenticationManager authManager;
 
+
     @GetMapping("/status")
     public Map<String, Boolean> checkStatus() {
-        // 如果能进到这里，说明已通过 Security 过滤器
-        // 也可以检查 SecurityContextHolder.getContext().getAuthentication()...
+        // Check if user is logged in
         return Map.of("loggedIn", true);
     }
 }

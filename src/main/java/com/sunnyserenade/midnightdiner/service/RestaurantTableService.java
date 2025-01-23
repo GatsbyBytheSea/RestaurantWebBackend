@@ -32,6 +32,7 @@ public class RestaurantTableService {
     public RestaurantTable addTable(RestaurantTable table) {
         table.setCreateTime(LocalDateTime.now());
         table.setUpdateTime(LocalDateTime.now());
+        table.setStatus("AVAILABLE");
         return tableRepository.save(table);
     }
 
@@ -44,6 +45,8 @@ public class RestaurantTableService {
     public RestaurantTable updateTable(Long id, RestaurantTable updated) {
         RestaurantTable table = tableRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Table not found"));
+        table.setStatus(updated.getStatus());
+        table.setLocation(updated.getLocation());
         table.setCapacity(updated.getCapacity());
         table.setUpdateTime(LocalDateTime.now());
         return tableRepository.save(table);

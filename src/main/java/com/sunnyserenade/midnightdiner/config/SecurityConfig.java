@@ -18,9 +18,7 @@ import java.io.PrintWriter;
 @Configuration
 public class SecurityConfig {
 
-    // ----------------
     // 过滤器链配置
-    // ----------------
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -31,45 +29,34 @@ public class SecurityConfig {
                     auth.requestMatchers("/api/v1/admin/auth/login").permitAll();
                     // 需要认证的接口
                     auth.requestMatchers("/api/v1/admin/**").authenticated();
-                    // 其他接口可根据需要设定
+                    // 对其他接口放行
                     auth.anyRequest().permitAll();
                 })
                 .formLogin(form -> form
-                        // 将默认登录请求路径改为 /api/v1/admin/auth/login
-                        // 当前端以表单方式 (username=xxx, password=yyy) POST 到这个地址时，Security会自动认证
                         .loginProcessingUrl("/api/v1/admin/auth/login")
                         .successHandler(authenticationSuccessHandler())  // 自定义成功处理器
                         .failureHandler(authenticationFailureHandler())  // 自定义失败处理器
                         .permitAll()
                 )
-                // 启用会话策略
                 .sessionManagement(session ->
-                        // 如果需要每次请求都能创建session：ALWAYS
-                        // 如果只在需要时才创建：IF_REQUIRED
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 );
         return http.build();
     }
 
-    // ----------------
     // AuthenticationManager
-    // ----------------
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ----------------
     // BCrypt 密码加密
-    // ----------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ----------------
     // 自定义登录成功处理器
-    // ----------------
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
@@ -81,9 +68,7 @@ public class SecurityConfig {
         };
     }
 
-    // ----------------
     // 自定义登录失败处理器
-    // ----------------
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return (request, response, exception) -> {

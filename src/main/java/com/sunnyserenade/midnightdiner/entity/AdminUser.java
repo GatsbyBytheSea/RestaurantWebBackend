@@ -16,7 +16,7 @@ public class AdminUser {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-    // ======= Getters/Setters =======
+    // Getters/Setters
 
     public Long getId() {
         return id;
