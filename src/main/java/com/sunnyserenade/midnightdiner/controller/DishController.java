@@ -25,7 +25,7 @@ public class DishController {
             return ResponseEntity.badRequest().body("No file uploaded");
         }
         try {
-            String folderPath = "src/main/resources/static/images/dishes";
+            String folderPath = "/var/www/images/dishes/";
             File folder = new File(folderPath);
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -35,11 +35,11 @@ public class DishController {
             String newFilename = System.currentTimeMillis() + "_" + originalFilename;
 
             File dest = new File(folder, newFilename);
-            file.transferTo(dest);      // 将上传的文件保存到服务器本地
 
-            // 构建可以访问的相对URL
-            String imageUrl = "/images/dishes/" + newFilename;
-
+            // 写文件到磁盘
+            file.transferTo(dest);
+            // 构建访问图片的URL
+            String imageUrl = "http://localhost:8080/images/dishes/" + newFilename;
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             e.printStackTrace();
