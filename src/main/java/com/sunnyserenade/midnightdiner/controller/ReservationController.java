@@ -14,30 +14,21 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
-    /**
-     * 创建预订
-     * POST /api/v1/reservations
-     */
+
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
         Reservation saved = reservationService.createReservation(reservation);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    /**
-     * 根据ID获取预订
-     * GET /api/v1/reservations/{id}
-     */
+
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservation(@PathVariable Long id) {
         Reservation reservation = reservationService.getReservationById(id);
         return ResponseEntity.ok(reservation);
     }
 
-    /**
-     * 更新预订
-     * PUT /api/v1/reservations/{id}
-     */
+
     @PutMapping("/{id}")
     public ResponseEntity<Reservation> updateReservation(
             @PathVariable Long id,
@@ -47,10 +38,7 @@ public class ReservationController {
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * 取消预订
-     * DELETE /api/v1/reservations/{id}
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);
