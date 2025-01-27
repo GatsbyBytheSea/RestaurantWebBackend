@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/admin/reservations")
@@ -70,8 +71,12 @@ public class AdminReservationController {
 
     // 管理员确认预订
     @PutMapping("/{id}/confirm")
-    public ResponseEntity<Void> confirmReservation(@PathVariable Long id) {
-        reservationService.confirmReservation(id);
+    public ResponseEntity<Void> confirmReservation(
+            @PathVariable Long id,
+            @RequestBody Map<String, Long> request
+    ) {
+        Long tableId = request.get("tableId");
+        reservationService.confirmReservation(id, tableId);
         return ResponseEntity.noContent().build();
     }
 

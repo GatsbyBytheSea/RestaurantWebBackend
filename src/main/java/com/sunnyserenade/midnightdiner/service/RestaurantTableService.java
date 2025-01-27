@@ -51,4 +51,8 @@ public class RestaurantTableService {
         table.setUpdateTime(LocalDateTime.now());
         return tableRepository.save(table);
     }
+
+    public List<RestaurantTable> getAvailableTables() {
+        return tableRepository.findByStatus("AVAILABLE");
+    }
 }

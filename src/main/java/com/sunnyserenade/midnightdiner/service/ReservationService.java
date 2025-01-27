@@ -1,7 +1,9 @@
 package com.sunnyserenade.midnightdiner.service;
 
 import com.sunnyserenade.midnightdiner.entity.Reservation;
+import com.sunnyserenade.midnightdiner.entity.RestaurantTable;
 import com.sunnyserenade.midnightdiner.repository.ReservationRepository;
+import com.sunnyserenade.midnightdiner.repository.RestaurantTableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class ReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private RestaurantTableRepository tableRepository;
 
     public Reservation createReservation(Reservation reservation) {
         // 设置初始状态
@@ -55,10 +60,26 @@ public class ReservationService {
         return reservationRepository.save(existing);
     }
 
-    public void confirmReservation(Long id) {
+    // ReservationService.java
+    public void confirmReservation(Long id, Long tableId) {
         Reservation existing = getReservationById(id);
+        RestaurantTable table = tableRepository.findById(tableId)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+
+        // 检查餐桌是否可用
+        if (!"AVAILABLE".equals(table.getStatus())) {
+            throw new RuntimeException("Table is not available");
+        }
+
         existing.setStatus("CONFIRMED");
+        existing.setTable(table);
         existing.setUpdateTime(LocalDateTime.now());
+
+        // 更新餐桌状态
+        table.setStatus("RESERVED");
+        table.setUpdateTime(LocalDateTime.now());
+        tableRepository.save(table);
+
         reservationRepository.save(existing);
     }
 

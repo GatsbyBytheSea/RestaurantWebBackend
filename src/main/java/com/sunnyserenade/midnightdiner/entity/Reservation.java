@@ -98,4 +98,11 @@ public class Reservation {
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
+
+    public RestaurantTable getTable() {
+        return table;
+    }
+    public void setTable(RestaurantTable table) {
+        this.table = table;
+    }
 }

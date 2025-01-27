@@ -55,4 +55,10 @@ public class AdminTableController {
         RestaurantTable result = tableService.updateTable(id, updated);
         return ResponseEntity.ok(result);
     }
+
+    // 查看所有可用餐桌
+    @GetMapping("/available")
+    public List<RestaurantTable> getAvailableTables() {
+        return tableService.getAvailableTables();
+    }
 }

@@ -56,7 +56,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 自定义登录成功处理器
+    // 登录成功处理器
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
@@ -68,7 +68,7 @@ public class SecurityConfig {
         };
     }
 
-    // 自定义登录失败处理器
+    // 登录失败处理器
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return (request, response, exception) -> {
