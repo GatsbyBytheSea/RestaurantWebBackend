@@ -60,7 +60,6 @@ public class ReservationService {
         return reservationRepository.save(existing);
     }
 
-    // ReservationService.java
     public void confirmReservation(Long id, Long tableId) {
         Reservation existing = getReservationById(id);
         RestaurantTable table = tableRepository.findById(tableId)
@@ -87,7 +86,14 @@ public class ReservationService {
         Reservation existing = getReservationById(id);
         existing.setStatus("CANCELLED");
         existing.setUpdateTime(LocalDateTime.now());
-        // todo：释放餐桌
+
+        RestaurantTable table = existing.getTable();
+        if (table != null && "RESERVED".equals(table.getStatus())) {
+            table.setStatus("AVAILABLE");
+            table.setUpdateTime(LocalDateTime.now());
+            tableRepository.save(table);
+        }
+
         reservationRepository.save(existing);
     }
 
