@@ -1,10 +1,12 @@
 package com.sunnyserenade.midnightdiner.service;
 
 import com.sunnyserenade.midnightdiner.dto.request.CloseOrderRequest;
+import com.sunnyserenade.midnightdiner.dto.request.CreateOrderRequest;
 import com.sunnyserenade.midnightdiner.dto.request.OrderItemRequest;
 import com.sunnyserenade.midnightdiner.entity.Dish;
 import com.sunnyserenade.midnightdiner.entity.Order;
 import com.sunnyserenade.midnightdiner.entity.OrderItem;
+import com.sunnyserenade.midnightdiner.entity.RestaurantTable;
 import com.sunnyserenade.midnightdiner.repository.OrderItemRepository;
 import com.sunnyserenade.midnightdiner.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,4 +94,61 @@ public class OrderService {
 
         return order;
     }
+
+    @Transactional
+    public Order createOrder(CreateOrderRequest request) {
+        if (request.getTableId() == null) {
+            throw new RuntimeException("tableId is required.");
+        }
+
+        // 检查桌子可用性
+        RestaurantTable table = tableService.getTable(request.getTableId());
+        if (table == null) {
+            throw new RuntimeException("Table not found with id: " + request.getTableId());
+        }
+        if (!"AVAILABLE".equalsIgnoreCase(table.getStatus())) {
+            throw new RuntimeException("Table is not available.");
+        }
+
+        // 创建并保存订单
+        Order order = new Order();
+        order.setTable(table);
+        order.setStatus("OPEN");
+        order.setTotalAmount(BigDecimal.ZERO);
+        order.setStartTime(LocalDateTime.now());
+        order.setCreateTime(LocalDateTime.now());
+        order.setUpdateTime(LocalDateTime.now());
+        orderRepo.save(order);
+
+        // 更新桌子状态
+        tableService.updateTableStatus(table.getId(), "IN_USE");
+
+        return order;
+    }
+
+    public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+        return orderItemRepo.findByOrderId(orderId);
+    }
+
+    @Transactional
+    public void removeItem(Long orderId, Long itemId) {
+        // 查找订单
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+
+        // 查找订单条目
+        OrderItem item = orderItemRepo.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("OrderItem not found with id: " + itemId));
+
+        // 校验订单条目是否属于订单
+        if (!item.getOrder().getId().equals(orderId)) {
+            throw new RuntimeException("This OrderItem does not belong to order " + orderId);
+        }
+        // 删除订单条目并重新计算总金额
+        orderItemRepo.delete(item);
+        updateTotalAmount(order);
+    }
+
 }

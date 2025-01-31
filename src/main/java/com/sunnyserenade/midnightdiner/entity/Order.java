@@ -18,6 +18,8 @@ public class Order {
     private String status;
     private LocalDateTime startTime;
     private LocalDateTime closeTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
     // getters/setters
     public Long getId() {
@@ -38,6 +40,9 @@ public class Order {
     public LocalDateTime getCloseTime() {
         return closeTime;
     }
+    public LocalDateTime getCreateTime() { return createTime; }
+    public LocalDateTime getUpdateTime() { return updateTime; }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -57,4 +62,6 @@ public class Order {
     public void setCloseTime(LocalDateTime closeTime) {
         this.closeTime = closeTime;
     }
+    public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }
+    public void setUpdateTime(LocalDateTime updateTime) { this.updateTime = updateTime; }
 }

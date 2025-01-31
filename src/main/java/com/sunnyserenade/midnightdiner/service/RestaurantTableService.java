@@ -55,4 +55,8 @@ public class RestaurantTableService {
     public List<RestaurantTable> getAvailableTables() {
         return tableRepository.findByStatus("AVAILABLE");
     }
+
+    public RestaurantTable getTable(Long id) {
+        return tableRepository.findById(id).orElseThrow(() -> new RuntimeException("Table not found"));
+    }
 }

@@ -1,8 +1,10 @@
 package com.sunnyserenade.midnightdiner.controller;
 
 import com.sunnyserenade.midnightdiner.dto.request.CloseOrderRequest;
+import com.sunnyserenade.midnightdiner.dto.request.CreateOrderRequest;
 import com.sunnyserenade.midnightdiner.dto.request.OrderItemRequest;
 import com.sunnyserenade.midnightdiner.entity.Order;
+import com.sunnyserenade.midnightdiner.entity.OrderItem;
 import com.sunnyserenade.midnightdiner.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +40,12 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/{orderId}/items")
+    public ResponseEntity<List<OrderItem>> getOrderItems(@PathVariable Long orderId) {
+        List<OrderItem> items = orderService.getOrderItemsByOrderId(orderId);
+        return ResponseEntity.ok(items);
+    }
+
     @GetMapping
     public ResponseEntity<Page<Order>> getOrders(
             @RequestParam(required = false) String status,
@@ -63,6 +71,33 @@ public class OrderController {
         try {
             Order closedOrder = orderService.closeOrder(orderId, request);
             return ResponseEntity.ok(closedOrder);
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest request) {
+        try {
+            Order newOrder = orderService.createOrder(request);
+            return ResponseEntity.ok(newOrder);
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{orderId}/items/{itemId}")
+    public ResponseEntity<?> removeItemFromOrder(
+            @PathVariable Long orderId,
+            @PathVariable Long itemId
+    ) {
+        try {
+            orderService.removeItem(orderId, itemId);
+            return ResponseEntity.noContent().build(); // 返回204无内容
         } catch (RuntimeException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
