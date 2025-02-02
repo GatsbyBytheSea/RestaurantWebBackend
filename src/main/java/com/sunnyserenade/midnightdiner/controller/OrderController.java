@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +26,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    // 添加菜品到订单
     @PostMapping("/{orderId}/items")
     public ResponseEntity<?> addItems(
             @PathVariable Long orderId,
@@ -103,5 +104,31 @@ public class OrderController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/closed/today")
+    public ResponseEntity<List<Order>> getTodayClosedOrders() {
+        List<Order> orders = orderService.getTodayClosedOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/closed/today/sales")
+    public ResponseEntity<Map<String, BigDecimal>> getTodaySales() {
+        BigDecimal total = orderService.getTodaySales();
+        return ResponseEntity.ok(Map.of("sales", total));
+    }
+
+    @GetMapping("/closed/history")
+    public ResponseEntity<List<Order>> getHistoricalClosedOrders(@RequestParam String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        List<Order> orders = orderService.getClosedOrdersByDate(localDate);
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/closed/history/sales")
+    public ResponseEntity<Map<String, BigDecimal>> getHistoricalSales(@RequestParam String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        BigDecimal total = orderService.getSalesByDate(localDate);
+        return ResponseEntity.ok(Map.of("sales", total));
     }
 }

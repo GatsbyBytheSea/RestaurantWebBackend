@@ -12,7 +12,7 @@ public class AdminUser {
 
     private String username;
     private String password;  // 存BCrypt加密密码
-    private String role;      // SUPER_ADMIN, ADMIN, etc.
+    private String role;      // SUPER_ADMIN, ADMIN
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 

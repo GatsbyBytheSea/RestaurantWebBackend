@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS order_item (
     dish_id BIGINT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
+    create_time DATETIME NOT NULL,
     FOREIGN KEY (order_id) REFERENCES `order`(id) ON DELETE CASCADE,
     FOREIGN KEY (dish_id) REFERENCES dish(id) ON DELETE CASCADE
 );

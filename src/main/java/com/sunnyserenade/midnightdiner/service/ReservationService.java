@@ -21,7 +21,6 @@ public class ReservationService {
     private RestaurantTableRepository tableRepository;
 
     public Reservation createReservation(Reservation reservation) {
-        // 设置初始状态
         reservation.setStatus("CREATED");
         reservation.setCreateTime(LocalDateTime.now());
         reservation.setUpdateTime(LocalDateTime.now());
@@ -65,7 +64,6 @@ public class ReservationService {
         RestaurantTable table = tableRepository.findById(tableId)
                 .orElseThrow(() -> new RuntimeException("Table not found"));
 
-        // 检查餐桌是否可用
         if (!"AVAILABLE".equals(table.getStatus())) {
             throw new RuntimeException("Table is not available");
         }
@@ -74,7 +72,6 @@ public class ReservationService {
         existing.setTable(table);
         existing.setUpdateTime(LocalDateTime.now());
 
-        // 更新餐桌状态
         table.setStatus("RESERVED");
         table.setUpdateTime(LocalDateTime.now());
         tableRepository.save(table);

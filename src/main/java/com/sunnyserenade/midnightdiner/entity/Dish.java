@@ -11,16 +11,16 @@ public class Dish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;         // 菜品名称
+    private String name;
     private String category;     // 分类：前菜、主菜、甜点、主食、酒水饮料等
-    private BigDecimal price;    // 价格
+    private BigDecimal price;
     @Column(columnDefinition = "TEXT")
-    private String description;  // 介绍
+    private String description;
 
     @Column(columnDefinition = "TEXT")
-    private String ingredients;  // 原材料信息
+    private String ingredients;  // 原材料
 
-    private String imageUrl;     // 图片URL
+    private String imageUrl;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 

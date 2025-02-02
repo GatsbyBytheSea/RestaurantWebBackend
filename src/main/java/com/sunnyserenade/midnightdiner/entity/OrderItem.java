@@ -2,6 +2,7 @@ package com.sunnyserenade.midnightdiner.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 public class OrderItem {
@@ -19,6 +20,7 @@ public class OrderItem {
 
     private Integer quantity;
     private BigDecimal price;
+    private LocalDateTime createTime;
 
     // getters/setters
     public Long getId() {
@@ -36,6 +38,7 @@ public class OrderItem {
     public BigDecimal getPrice() {
         return price;
     }
+    public LocalDateTime getCreateTime() { return createTime; }
 
     public void setId(Long id) {
         this.id = id;
@@ -52,4 +55,5 @@ public class OrderItem {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+    public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }
 }

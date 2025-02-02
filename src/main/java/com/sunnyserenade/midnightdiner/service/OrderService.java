@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,12 @@ public class OrderService {
             item.setDish(dish);
             item.setQuantity(request.getQuantity());
             item.setPrice(dish.getPrice());
+            item.setCreateTime(LocalDateTime.now());
             orderItems.add(item);
         }
+
+        order.setUpdateTime(LocalDateTime.now());
+        orderRepo.save(order);
 
         orderItemRepo.saveAll(orderItems);
 
@@ -101,7 +106,6 @@ public class OrderService {
             throw new RuntimeException("tableId is required.");
         }
 
-        // 检查桌子可用性
         RestaurantTable table = tableService.getTable(request.getTableId());
         if (table == null) {
             throw new RuntimeException("Table not found with id: " + request.getTableId());
@@ -110,7 +114,6 @@ public class OrderService {
             throw new RuntimeException("Table is not available.");
         }
 
-        // 创建并保存订单
         Order order = new Order();
         order.setTable(table);
         order.setStatus("OPEN");
@@ -120,7 +123,6 @@ public class OrderService {
         order.setUpdateTime(LocalDateTime.now());
         orderRepo.save(order);
 
-        // 更新桌子状态
         tableService.updateTableStatus(table.getId(), "IN_USE");
 
         return order;
@@ -134,21 +136,44 @@ public class OrderService {
 
     @Transactional
     public void removeItem(Long orderId, Long itemId) {
-        // 查找订单
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
 
-        // 查找订单条目
         OrderItem item = orderItemRepo.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("OrderItem not found with id: " + itemId));
 
-        // 校验订单条目是否属于订单
         if (!item.getOrder().getId().equals(orderId)) {
             throw new RuntimeException("This OrderItem does not belong to order " + orderId);
         }
-        // 删除订单条目并重新计算总金额
         orderItemRepo.delete(item);
         updateTotalAmount(order);
     }
 
+    public List<Order> getTodayClosedOrders() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay().minusSeconds(1);
+        return orderRepo.findClosedOrdersByCloseTimeBetween(start, end);
+    }
+
+    public BigDecimal getTodaySales() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay().minusSeconds(1);
+        BigDecimal total = orderRepo.sumTotalAmountByCloseTimeBetween(start, end);
+        return total != null ? total : BigDecimal.ZERO;
+    }
+
+    public List<Order> getClosedOrdersByDate(LocalDate date) {
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay().minusSeconds(1);
+        return orderRepo.findClosedOrdersByCloseTimeBetween(start, end);
+    }
+
+    public BigDecimal getSalesByDate(LocalDate date) {
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay().minusSeconds(1);
+        BigDecimal total = orderRepo.sumTotalAmountByCloseTimeBetween(start, end);
+        return total != null ? total : BigDecimal.ZERO;
+    }
 }
