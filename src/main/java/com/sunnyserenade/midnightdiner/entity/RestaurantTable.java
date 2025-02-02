@@ -16,6 +16,7 @@ public class RestaurantTable {
     private String Location;      // Location of the table
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private Long currentOrderId;
 
     // Getters/Setters
 
@@ -40,7 +41,7 @@ public class RestaurantTable {
     public void setLocation(String location) {
         Location = location;
     }
-
+    public Long getCurrentOrderId() { return currentOrderId;}
 
     public Integer getCapacity() {
         return capacity;
@@ -63,4 +64,5 @@ public class RestaurantTable {
     public String getLocation() {
         return Location;
     }
+    public void setCurrentOrderId(Long currentOrderId) { this.currentOrderId = currentOrderId; }
 }

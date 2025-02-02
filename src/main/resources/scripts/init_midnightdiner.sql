@@ -26,7 +26,11 @@ CREATE TABLE IF NOT EXISTS restaurant_table (
     location VARCHAR(100),
     status VARCHAR(20) NOT NULL,
     create_time DATETIME NOT NULL,
-    update_time DATETIME NOT NULL
+    update_time DATETIME NOT NULL,
+    current_order_id BIGINT,
+    FOREIGN KEY (current_order_id) REFERENCES `order`(id)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 );
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON midnightdiner.restaurant_table TO 'midnightdineruser'@'%';

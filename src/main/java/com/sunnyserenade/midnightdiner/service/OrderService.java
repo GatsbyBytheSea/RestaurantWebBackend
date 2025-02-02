@@ -95,6 +95,12 @@ public class OrderService {
                 request.getTableId() : order.getTable().getId();
         tableService.updateTableStatus(tableId, "AVAILABLE");
 
+        RestaurantTable table = tableService.getTable(tableId);
+        table.setCurrentOrderId(null);
+        if (request != null) {
+            tableService.updateTable(tableId,table);
+        }
+
         dailySalesService.recordDailySales(order.getTotalAmount());
 
         return order;
@@ -110,7 +116,7 @@ public class OrderService {
         if (table == null) {
             throw new RuntimeException("Table not found with id: " + request.getTableId());
         }
-        if (!"AVAILABLE".equalsIgnoreCase(table.getStatus())) {
+        if ("IN_USE".equalsIgnoreCase(table.getStatus())) {
             throw new RuntimeException("Table is not available.");
         }
 
@@ -124,6 +130,8 @@ public class OrderService {
         orderRepo.save(order);
 
         tableService.updateTableStatus(table.getId(), "IN_USE");
+        table.setCurrentOrderId(order.getId());
+        tableService.updateTable(request.getTableId() ,table);
 
         return order;
     }
