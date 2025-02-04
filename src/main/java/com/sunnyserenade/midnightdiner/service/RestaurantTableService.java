@@ -49,6 +49,11 @@ public class RestaurantTableService {
         table.setLocation(updated.getLocation());
         table.setCapacity(updated.getCapacity());
         table.setUpdateTime(LocalDateTime.now());
+        table.setGridX(updated.getGridX());
+        table.setGridY(updated.getGridY());
+        table.setGridWidth(updated.getGridWidth());
+        table.setGridHeight(updated.getGridHeight());
+        table.setUpdateTime(LocalDateTime.now());
         return tableRepository.save(table);
     }
 

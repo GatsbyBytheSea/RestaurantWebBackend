@@ -13,10 +13,19 @@ public class RestaurantTable {
     private String tableName;     // 桌名/编号
     private Integer capacity;     // 可容纳人数
     private String status;        // AVAILABLE / IN_USE / RESERVED
-    private String Location;      // Location of the table
+    private String location;      // Location of the table
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Long currentOrderId;
+
+    @Column(name = "grid_x", nullable = false)
+    private Integer gridX;
+    @Column(name = "grid_y", nullable = false)
+    private Integer gridY;
+    @Column(name = "grid_width", nullable = false)
+    private Integer gridWidth;
+    @Column(name = "grid_height", nullable = false)
+    private Integer gridHeight;
 
     // Getters/Setters
 
@@ -39,19 +48,19 @@ public class RestaurantTable {
         this.tableName = tableName;
     }
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
     public Long getCurrentOrderId() { return currentOrderId;}
+    public Integer getGridX() { return gridX; }
+    public Integer getGridY() { return gridY; }
+    public Integer getGridWidth() { return gridWidth; }
+    public Integer getGridHeight() { return gridHeight; }
 
     public Integer getCapacity() {
         return capacity;
     }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
+    public LocalDateTime getUpdateTime() { return updateTime; }
+    public LocalDateTime getCreateTime() { return createTime; }
     public String getStatus() {
         return status;
     }
@@ -62,7 +71,11 @@ public class RestaurantTable {
         return tableName;
     }
     public String getLocation() {
-        return Location;
+        return location;
     }
     public void setCurrentOrderId(Long currentOrderId) { this.currentOrderId = currentOrderId; }
+    public void setGridX(Integer gridX) { this.gridX = gridX; }
+    public void setGridY(Integer gridY) { this.gridY = gridY; }
+    public void setGridWidth(Integer gridWidth) { this.gridWidth = gridWidth; }
+    public void setGridHeight(Integer gridHeight) { this.gridHeight = gridHeight; }
 }

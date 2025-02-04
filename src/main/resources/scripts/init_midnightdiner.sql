@@ -28,6 +28,10 @@ CREATE TABLE IF NOT EXISTS restaurant_table (
     create_time DATETIME NOT NULL,
     update_time DATETIME NOT NULL,
     current_order_id BIGINT,
+    grid_x INT NOT NULL,
+    grid_y INT NOT NULL,
+    grid_width INT NOT NULL DEFAULT 1,
+    grid_height INT NOT NULL DEFAULT 1,
     FOREIGN KEY (current_order_id) REFERENCES `order`(id)
         ON UPDATE CASCADE
         ON DELETE SET NULL
