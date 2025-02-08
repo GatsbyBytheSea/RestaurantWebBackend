@@ -36,14 +36,4 @@ public class DailySalesService {
         return dailySalesRepository.findByDateBetween(startDate, endDate);
     }
 
-    public DailySales getTodaySales() {
-        return dailySalesRepository.findByDate(LocalDate.now())
-                .orElseGet(() -> {
-                    DailySales newRecord = new DailySales();
-                    newRecord.setDate(LocalDate.now());
-                    newRecord.setTotalSales(BigDecimal.ZERO);
-                    newRecord.setCreateTime(LocalDateTime.now());
-                    return newRecord;
-                });
-    }
 }

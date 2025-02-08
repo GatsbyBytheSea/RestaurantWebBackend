@@ -23,10 +23,4 @@ public class DailySalesController {
         List<DailySales> sales = dailySalesService.getSalesBetween(start, end);
         return ResponseEntity.ok(sales);
     }
-
-    @GetMapping("/today")
-    public ResponseEntity<DailySales> getTodaySales() {
-        DailySales sales = dailySalesService.getTodaySales();
-        return ResponseEntity.ok(sales);
-    }
 }
