@@ -16,7 +16,6 @@ public class AdminAuthController {
 
     @GetMapping("/status")
     public Map<String, Boolean> checkStatus() {
-        // Check if user is logged in
         return Map.of("loggedIn", true);
     }
 }

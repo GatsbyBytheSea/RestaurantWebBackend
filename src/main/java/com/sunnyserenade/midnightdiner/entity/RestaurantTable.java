@@ -10,10 +10,10 @@ public class RestaurantTable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tableName;     // 桌名/编号
-    private Integer capacity;     // 可容纳人数
-    private String status;        // AVAILABLE / IN_USE / RESERVED
-    private String location;      // Location of the table
+    private String tableName;
+    private Integer capacity;
+    private String status;
+    private String location;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Long currentOrderId;

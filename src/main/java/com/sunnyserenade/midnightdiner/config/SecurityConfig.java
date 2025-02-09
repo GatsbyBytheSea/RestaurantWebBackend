@@ -18,24 +18,20 @@ import java.io.PrintWriter;
 @Configuration
 public class SecurityConfig {
 
-    // 过滤器链配置
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // 关闭CSRF
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    // 允许匿名访问的接口
                     auth.requestMatchers("/api/v1/reservations/**").permitAll();
                     auth.requestMatchers("/api/v1/admin/auth/login").permitAll();
-                    // 需要认证的接口
                     auth.requestMatchers("/api/v1/admin/**").authenticated();
-                    // 对其他接口放行
                     auth.anyRequest().permitAll();
                 })
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/v1/admin/auth/login")
-                        .successHandler(authenticationSuccessHandler())  // 自定义成功处理器
-                        .failureHandler(authenticationFailureHandler())  // 自定义失败处理器
+                        .successHandler(authenticationSuccessHandler())
+                        .failureHandler(authenticationFailureHandler())
                         .permitAll()
                 )
                 .sessionManagement(session ->
@@ -50,13 +46,12 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // BCrypt 密码加密
+    // BCrypt password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 登录成功处理器
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
@@ -68,7 +63,6 @@ public class SecurityConfig {
         };
     }
 
-    // 登录失败处理器
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return (request, response, exception) -> {

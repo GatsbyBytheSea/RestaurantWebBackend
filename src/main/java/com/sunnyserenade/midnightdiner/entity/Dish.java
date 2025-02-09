@@ -12,13 +12,13 @@ public class Dish {
     private Long id;
 
     private String name;
-    private String category;     // 分类：前菜、主菜、甜点、主食、酒水饮料等
+    private String category;
     private BigDecimal price;
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(columnDefinition = "TEXT")
-    private String ingredients;  // 原材料
+    private String ingredients;
 
     private String imageUrl;
     private LocalDateTime createTime;

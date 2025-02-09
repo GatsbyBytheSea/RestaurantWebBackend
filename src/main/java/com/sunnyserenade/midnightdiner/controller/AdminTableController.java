@@ -15,13 +15,11 @@ public class AdminTableController {
     @Autowired
     private RestaurantTableService tableService;
 
-    // 查看所有餐桌
     @GetMapping
     public List<RestaurantTable> getAllTables() {
         return tableService.findAllTables();
     }
 
-    // 更新餐桌状态
     @PutMapping("/{id}/status")
     public ResponseEntity<RestaurantTable> updateStatus(
             @PathVariable Long id,
@@ -32,21 +30,18 @@ public class AdminTableController {
         return ResponseEntity.ok(updated);
     }
 
-    // 添加餐桌
     @PostMapping
     public ResponseEntity<RestaurantTable> addTable(@RequestBody RestaurantTable table) {
         RestaurantTable saved = tableService.addTable(table);
         return ResponseEntity.ok(saved);
     }
 
-    // 删除餐桌
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTable(@PathVariable Long id) {
         tableService.deleteTable(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 修改餐桌信息
     @PutMapping("/{id}")
     public ResponseEntity<RestaurantTable> updateTable(
             @PathVariable Long id,
@@ -56,7 +51,6 @@ public class AdminTableController {
         return ResponseEntity.ok(result);
     }
 
-    // 查看所有可用餐桌
     @GetMapping("/available")
     public List<RestaurantTable> getAvailableTables() {
         return tableService.getAvailableTables();

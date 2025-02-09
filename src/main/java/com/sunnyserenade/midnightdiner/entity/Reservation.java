@@ -10,27 +10,21 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 顾客姓名
     @Column(nullable = false)
     private String customerName;
 
-    // 顾客电话
     @Column(nullable = false)
     private String customerPhone;
 
-    // 预订时间
     @Column(nullable = false)
     private LocalDateTime reservationTime;
 
-    // 用餐人数
     @Column(nullable = false)
     private Integer numberOfGuests;
 
-    // 预订状态: CREATED, CANCELLED, CONFIRMED, COMPLETED 等
     @Column(nullable = false)
     private String status;
 
-    // 更新时间
     @Column(nullable = false)
     private LocalDateTime createTime;
 

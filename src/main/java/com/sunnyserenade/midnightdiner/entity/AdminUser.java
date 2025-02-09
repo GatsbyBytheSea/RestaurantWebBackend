@@ -11,7 +11,7 @@ public class AdminUser {
     private Long id;
 
     private String username;
-    private String password;  // 存BCrypt加密密码
+    private String password;  // Encrypted password
     private String role;      // SUPER_ADMIN, ADMIN
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

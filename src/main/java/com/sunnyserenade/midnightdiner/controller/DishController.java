@@ -18,7 +18,6 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
-    // 上传图片
     @PostMapping("/uploadImage")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -30,15 +29,12 @@ public class DishController {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            // 生成唯一文件名
             String originalFilename = file.getOriginalFilename();
             String newFilename = System.currentTimeMillis() + "_" + originalFilename;
 
             File dest = new File(folder, newFilename);
 
-            // 写文件到磁盘
             file.transferTo(dest);
-            // 构建访问图片的URL
             String imageUrl = "http://localhost:8080/images/dishes/" + newFilename;
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
@@ -47,34 +43,29 @@ public class DishController {
         }
     }
 
-    // 列出所有菜品
     @GetMapping
     public List<Dish> getAllDishes() {
         return dishService.getAllDishes();
     }
 
-    // 根据id获取菜品
     @GetMapping("/{id}")
     public ResponseEntity<Dish> getDishById(@PathVariable Long id) {
         Dish dish = dishService.getDish(id);
         return ResponseEntity.ok(dish);
     }
 
-    // 新增菜品
     @PostMapping
     public ResponseEntity<Dish> createDish(@RequestBody Dish dish) {
         Dish created = dishService.createDish(dish);
         return ResponseEntity.ok(created);
     }
 
-    // 更新菜品信息
     @PutMapping("/{id}")
     public ResponseEntity<Dish> updateDish(@PathVariable Long id, @RequestBody Dish updated) {
         Dish result = dishService.updateDish(id, updated);
         return ResponseEntity.ok(result);
     }
 
-    // 删除菜品
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDish(@PathVariable Long id) {
         dishService.deleteDish(id);
