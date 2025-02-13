@@ -3,6 +3,7 @@ package com.sunnyserenade.midnightdiner.controller;
 import com.sunnyserenade.midnightdiner.entity.Dish;
 import com.sunnyserenade.midnightdiner.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,13 @@ public class DishController {
      */
     @Autowired
     private DishService dishService;
+
+
+    /**
+     * The URL of the image server.
+     */
+    @Value("${image.server.url}")
+    private String imageServerUrl;
 
     /**
      * Endpoint for uploading a dish image.
@@ -53,7 +61,8 @@ public class DishController {
 
             // Save file to the server
             file.transferTo(dest);
-            String imageUrl = "http://localhost:8080/images/dishes/" + newFilename;
+
+            String imageUrl = imageServerUrl + newFilename;
 
             // Return the publicly accessible URL
             return ResponseEntity.ok(imageUrl);

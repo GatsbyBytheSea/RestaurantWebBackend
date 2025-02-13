@@ -125,6 +125,39 @@ Ensure you have **JDK**, **Maven**, and **MySQL** installed.
    - Verify username and password.
    - Check logs for `Invalid credentials` errors.
 
+## HTTPS Configuration and Deployment
+
+To enhance the security of data transmission, this project has switched from HTTP to HTTPS for API communication. During deployment, you need to generate and configure SSL/TLS certificates. Depending on your environment, you can choose one of the following methods:
+
+In a development or test environment, you can use the JDK's built-in `keytool` to generate a self-signed certificate. Run the following command to create a PKCS12 keystore file:
+
+```bash
+keytool -genkeypair -alias your_alias -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore.p12 -validity 3650
+```
+
+After executing the command, you will be prompted to enter a keystore password and provide your name, organization, and other details. Place the generated `keystore.p12` file in the `src/main/resources` directory of your project.
+
+### Configuring SSL in Spring Boot
+
+I have already configured the SSL settings in the `application.yml` file. You can update the following properties to match your keystore details:
+
+```properties
+server.port=8443
+server.ssl.key-store=classpath:keystore.p12
+server.ssl.key-store-password=<your_password>
+server.ssl.keyStoreType=PKCS12
+server.ssl.keyAlias=<your_alias>
+```
+
+### Updating Frontend Configuration
+
+Update your frontend environment variable to use HTTPS for API requests. For example, in your `.env.production` or `.env.development` file, set:
+
+```properties
+VITE_API_BASE_URL=https://<your-server-domain-or-ip>:8443
+```
+
+
 ## Version & Roadmap
 
 - **Current Version**: Initial stable release.
@@ -149,4 +182,3 @@ Copyright (c) 2025 [**Xinlei ZHU**](https://github.com/GatsbyBytheSea)
 
 > **Copyright &copy; 2025 [Xinlei ZHU](https://github.com/GatsbyBytheSea).**
 > Licensed under the MIT License.
-
