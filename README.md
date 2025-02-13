@@ -49,9 +49,12 @@ RestaurantWebBackend
 │  │  │     ├─ service                  # Business logic layer
 │  │  │     └─ MidnightdinerApplication # Main Spring Boot application class
 │  │  ├─ resources
+│  │  │  ├─ application.properties      # Spring Boot configuration
+│  │  │  ├─ application-dev.yml         # Development configuration
+│  │  │  ├─ application-prod.yml        # Production configuration
+│  │  │  ├─ application-test.yml        # Test configuration
 │  │  │  └─ scripts                     # Database initialization scripts
-│  │  ├─ application.yml                # Spring Boot configuration
-│  │  └─ webapp                         # Static resources (if any)
+│  │  └─ application.yml                # Spring Boot configuration
 ├─ pom.xml
 └─ README.md                            # Project documentation
 ```
